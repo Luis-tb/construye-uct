@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ProblemCard from "./ProblemCard";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, AlertTriangle } from "lucide-react";
@@ -20,6 +21,7 @@ interface ProblemListProps {
 }
 
 export default function ProblemList({ problemas }: ProblemListProps) {
+  const [openCardId, setOpenCardId] = useState<string | null>(null);
   return (
     <section className="py-8">
       <div className="container mx-auto px-4">
@@ -31,9 +33,20 @@ export default function ProblemList({ problemas }: ProblemListProps) {
           </Badge>
         </div>
 
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
           {problemas.map((problema) => (
-            <ProblemCard key={problema.id} problema={problema} />
+            <ProblemCard
+              key={problema.id}
+              problema={problema}
+              isOpen={openCardId === `item-${problema.id}`}
+              onToggle={(isOpen) => {
+                if (isOpen) {
+                  setOpenCardId(`item-${problema.id}`);
+                } else {
+                  setOpenCardId(null);
+                }
+              }}
+            />
           ))}
         </div>
 
