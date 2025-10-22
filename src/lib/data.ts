@@ -1,4 +1,4 @@
-import { Home, Shield, Wrench } from "lucide-react";
+import { Home, Shield, BrickWall, LampCeiling, Zap, Droplets } from "lucide-react";
 
 export const problemas = [
     {
@@ -70,8 +70,8 @@ export const problemas = [
 export const categorias = [
     { id: "todos", nombre: "Todos los Problemas", icono: Home },
     { id: "cimientos", nombre: "Cimientos", icono: Shield },
-    { id: "paredes", nombre: "Paredes", icono: Home },
-    { id: "techo", nombre: "Techos", icono: Home },
-    { id: "electricidad", nombre: "Electricidad", icono: Wrench },
-    { id: "plomeria", nombre: "Plomería", icono: Wrench },
+    { id: "paredes", nombre: "Paredes", icono: BrickWall },
+    { id: "techo", nombre: "Techos", icono: LampCeiling },
+    { id: "electricidad", nombre: "Electricidad", icono: Zap },
+    { id: "plomeria", nombre: "Plomería", icono: Droplets },
   ];

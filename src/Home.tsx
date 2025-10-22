@@ -1,11 +1,11 @@
-import {useState} from "react";
-import {problemas, categorias} from "@/lib/data";
+import { useState } from "react";
+import { problemas, categorias } from "@/lib/data";
 import HeroSection from "@/components/guide/HeroSection";
 import Categories from "@/components/guide/Categories";
 import ProblemList from "@/components/guide/ProblemList";
 import EmergencyContact from "@/components/guide/EmergencyContact";
 
-export default function Guide() {
+export default function Home() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("todos");
 

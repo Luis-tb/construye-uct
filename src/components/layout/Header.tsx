@@ -1,5 +1,4 @@
 import {useState} from "react";
-import logoUrl from "./../../../public/logo.svg";
 import {MapPin, Menu, X} from "lucide-react";
 import {Link} from "react-router-dom";
 
@@ -12,7 +11,7 @@ export default function Header() {
                 <div className="flex items-center justify-between h-20">
                     <div className="flex items-center">
                         <Link to="/" className="flex items-center space-x-3 text-white">
-                            <img src={logoUrl} alt="Logo" className="h-16 w-16"/>
+                            <img src="/logo.svg" alt="Logo" className="h-16 w-16"/>
                             <div>
                                 <h1 className="text-xl font-bold">Aprende UCT</h1>
                                 <p className="text-sm text-slate-300 uppercase">Facultad de ingenieria y

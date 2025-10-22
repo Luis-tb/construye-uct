@@ -1,4 +1,3 @@
-import logoUrl from "../../../public/logo.svg";
 
 export default function Footer() {
     return (
@@ -6,11 +5,11 @@ export default function Footer() {
             <div className="container mx-auto px-4">
                 <div className="text-center">
                     <div className="flex items-center justify-center space-x-2 mb-4">
-                        <img src={logoUrl} alt="Logo" className="h-8 w-8"/>
+                        <img src="/logo.svg" alt="Logo" className="h-8 w-8"/>
                         <span className="font-semibold">Guía de Construcción Perú</span>
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">
-                        Información basada en estándares y datos de SENCICO
+                        Información basada en estándares y datos de construcción
                     </p>
                     <p className="text-xs text-muted-foreground">
                         Esta guía es informativa. Para problemas complejos, consulta

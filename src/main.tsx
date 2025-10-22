@@ -2,8 +2,11 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import Guide from "./Guide.tsx";
+import Home from "./Home.tsx";
+import Guides from "./Guides.tsx";
+import ProblemDetail from "./components/guide/ProblemDetail.tsx";
 import Layout from "./components/layout/Layout.tsx";
+import Calculator from "./Calculator.tsx";
 
 // Placeholder components for new routes
 export const Profesionales = () => <div>Página de Profesionales (en construcción)</div>;
@@ -15,8 +18,20 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        index: true, // This makes Guide the default child route for "/"
-        element: <Guide />,
+        index: true, 
+        element: <Home />,
+      },
+      {
+        path: "guias",
+        element: <Guides />,
+      },
+      {
+        path: "problema/:id",
+        element: <ProblemDetail />,
+      },
+      {
+        path: "calculadora",
+        element: <Calculator />,
       },
       {
         path: "profesionales",
