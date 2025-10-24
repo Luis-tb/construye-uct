@@ -29,6 +29,8 @@ interface Problema {
 
 interface ProblemCardProps {
   problema: Problema;
+  isOpen: boolean;
+  onToggle: (isOpen: boolean) => void;
 }
 
 const getDifficultyColor = (dificultad: string) => {
@@ -44,7 +46,7 @@ const getDifficultyColor = (dificultad: string) => {
   }
 };
 
-export default function ProblemCard({ problema }: ProblemCardProps) {
+export default function ProblemCard({ problema, isOpen, onToggle }: ProblemCardProps) {
   return (
     <Card className="hover:shadow-lg transition-shadow">
       <CardHeader>
@@ -61,7 +63,13 @@ export default function ProblemCard({ problema }: ProblemCardProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full"
+          value={isOpen ? "solucion" : ""}
+          onValueChange={(value) => onToggle(value === "solucion")}
+        >
           <AccordionItem value="solucion">
             <AccordionTrigger className="text-left">
               <div className="flex items-center space-x-2">
