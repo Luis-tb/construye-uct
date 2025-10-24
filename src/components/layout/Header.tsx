@@ -76,34 +76,34 @@ export default function Header() {
 
     return (
         <>
-            <header className="sticky top-0 z-50 text-white shadow-lg bg-[#022867]">
+            <header className="sticky top-0 z-50 text-black shadow-lg bg-white">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-20">
                         {/* Logo */}
-                        <Link to="/" className="flex items-center space-x-3 text-white">
-                            <img src="/logo.svg" alt="Logo" className="h-16 w-16" />
-                            <div>
-                                <h1 className="text-xl font-bold">Aprende UCT</h1>
-                                <p className="text-sm text-slate-300 uppercase">
-                                    Facultad de Ingeniería y Arquitectura
-                                </p>
-                            </div>
+                        <Link to="/" className="flex items-center space-x-3 text-black">
+                            <img src="/logo-large.svg" alt="Logo" className="h-16 w-64" />
                         </Link>
 
                         {/* Navegación */}
                         <div className="flex items-center space-x-6">
                             <nav className="hidden md:flex items-center space-x-6">
-                                <Link to="/" className="text-sm font-medium text-slate-200 hover:text-white">
+                                <Link to="/" className="text-sm font-medium text-slate-600 hover:text-black">
                                     Inicio
                                 </Link>
-                                <Link to="/guias" className="text-sm font-medium text-slate-200 hover:text-white">
+                                <Link to="/guias" className="text-sm font-medium text-slate-600 hover:text-black">
                                     Guías
                                 </Link>
                                 <Link
                                     to="/calculadora"
-                                    className="text-sm font-medium text-slate-200 hover:text-white"
+                                    className="text-sm font-medium text-slate-600 hover:text-black"
                                 >
                                     Calculadora
+                                </Link>
+                                <Link
+                                    to="/profesionales"
+                                    className="text-sm font-medium text-slate-600 hover:text-black"
+                                >
+                                    Profesionales
                                 </Link>
                             </nav>
 
@@ -119,7 +119,7 @@ export default function Header() {
 
                             {/* Botón menú móvil */}
                             <div className="md:hidden">
-                                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white">
+                                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-black">
                                     {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                                 </button>
                             </div>
@@ -132,24 +132,31 @@ export default function Header() {
                             <nav className="flex flex-col items-center space-y-4">
                                 <Link
                                     to="/"
-                                    className="text-sm font-medium text-slate-200 hover:text-white"
+                                    className="text-sm font-medium text-slate-600 hover:text-black"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
                                     Inicio
                                 </Link>
                                 <Link
                                     to="/guias"
-                                    className="text-sm font-medium text-slate-200 hover:text-white"
+                                    className="text-sm font-medium text-slate-600 hover:text-black"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
                                     Guías
                                 </Link>
                                 <Link
                                     to="/calculadora"
-                                    className="text-sm font-medium text-slate-200 hover:text-white"
+                                    className="text-sm font-medium text-slate-600 hover:text-black"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
                                     Calculadora
+                                </Link>
+                                <Link
+                                    to="/profesionales"
+                                    className="text-sm font-medium text-slate-600 hover:text-black"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Profesionales
                                 </Link>
 
                                 {/* Botón móvil dinámico */}
@@ -159,7 +166,7 @@ export default function Header() {
                                             void handleLogout();
                                             setIsMenuOpen(false);
                                         }}
-                                        className="w-full text-center text-sm font-medium text-white bg-red-600 hover:bg-red-700 py-2 rounded-md transition-colors"
+                                        className="w-full text-center text-sm font-medium text-black bg-red-600 hover:bg-red-700 py-2 rounded-md transition-colors"
                                     >
                                         <LogOut className="h-4 w-4 inline-block mr-2" />
                                         Cerrar Sesión
@@ -170,7 +177,7 @@ export default function Header() {
                                             setIsLoginModalOpen(true);
                                             setIsMenuOpen(false);
                                         }}
-                                        className="w-full text-center text-sm font-medium text-white bg-white/10 hover:bg-white/20 py-2 rounded-md transition-colors"
+                                        className="w-full text-center text-sm font-medium text-black bg-white/10 hover:bg-white/20 py-2 rounded-md transition-colors"
                                     >
                                         <LogIn className="h-4 w-4 inline-block mr-2" />
                                         Iniciar Sesión

@@ -8,8 +8,8 @@ import ProblemDetail from "./components/guide/ProblemDetail.tsx";
 import Layout from "./components/layout/Layout.tsx";
 import Calculator from "./Calculator.tsx";
 
-// Placeholder components for new routes
-export const Profesionales = () => <div>Página de Profesionales (en construcción)</div>;
+// Componente de Profesionales actualizado
+import Profesionales from "./Profesionales.tsx";
 export const Contacto = () => <div>Página de Contacto (en construcción)</div>;
 
 const router = createBrowserRouter([

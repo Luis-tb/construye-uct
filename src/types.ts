@@ -34,3 +34,15 @@ export interface GuiaPrincipal {
   url: string;
   icono: FC<{ className?: string }>;
 }
+
+/**
+ * Define la estructura de un marcador para el mapa.
+ */
+export interface MarkerData {
+    id: string;
+    lat: number;
+    lng: number;
+    label: string; // Nombre del profesional o lugar
+    specialty?: string; // Especialidad del profesional
+    phone?: string; // Teléfono de contacto
+}
