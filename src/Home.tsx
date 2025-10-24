@@ -46,11 +46,16 @@ export default function Home() {
                         transition={{ duration: 0.3, ease: "easeOut" }}
                         className="fixed inset-0 z-50 flex items-center justify-center
                        bg-[#022867]/20 backdrop-blur-md"
+                        onClick={() => setIsLoginModalOpen(false)} // 👈 clic en el overlay
                     >
-                        <LoginModal
-                            isOpen={isLoginModalOpen}
-                            onClose={() => setIsLoginModalOpen(false)}
-                        />
+                        <motion.div
+                            onClick={(e) => e.stopPropagation()} // 👈 evita que el clic en el modal cierre
+                        >
+                            <LoginModal
+                                isOpen={isLoginModalOpen}
+                                onClose={() => setIsLoginModalOpen(false)}
+                            />
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
