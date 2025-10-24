@@ -1,30 +1,88 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { problemas, categorias } from "@/lib/data";
-import HeroSection from "@/components/guide/HeroSection";
 import Categories from "@/components/guide/Categories";
 import ProblemList from "@/components/guide/ProblemList";
+import HeroSection from "@/components/guide/HeroSection";
 import EmergencyContact from "@/components/guide/EmergencyContact";
 import LoginModal from "@/components/auth/LoginModal";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
+import { supabase } from "@/lib/supabaseClient";
+import type { Categoria, Problema } from "@/types";
+
+// ⚠️ CAMBIO CLAVE AQUÍ ⚠️
+// Importa todos los componentes de Lucide como un solo objeto.
+import * as LucideIcons from "lucide-react";
+// Importa 'Home' específicamente para usarlo como fallback (opcional, pero buena práctica).
+import { Home as HomeIcon } from "lucide-react";
 
 export default function Home() {
     const { user } = useSupabaseAuth();
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
+    const [searchTerm, setSearchTerm] = useState("");
+    const [categorias, setCategorias] = useState<Categoria[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<string>("todos");
+    const [problemas, setProblemas] = useState<Problema[]>([]);
+
+    // Modal login
     useEffect(() => {
-        // Espera un poco para que supabase termine de validar sesión antes de decidir
-        const timer = setTimeout(() => {
-            if (user === null) setIsLoginModalOpen(true);
-            else if (user) setIsLoginModalOpen(false);
-        }, 300); // pequeño delay suave
+        const timer = setTimeout(() => setIsLoginModalOpen(user === null), 300);
         return () => clearTimeout(timer);
     }, [user]);
 
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("todos");
+    // Traer categorías y problemas
+    useEffect(() => {
+        (async () => {
+            try {
+                const { data: categoriasData, error: catError } = await supabase
+                    .from("categorias")
+                    .select("*");
+                if (catError) console.error("Error categorías:", catError);
 
-    const problemasFiltrados = problemas.filter((problema) => {
+                const { data: problemasData, error: probError } = await supabase
+                    .from("problemas")
+                    .select("*");
+                if (probError) console.error("Error problemas:", probError);
+
+                // Mapear categorías
+                const mappedCategorias = (categoriasData || []).map(cat => {
+                    // 🚀 Accede al componente de icono de Lucide dinámicamente usando el string de Supabase.
+                    // Si el nombre no existe, usa 'HomeIcon' como fallback.
+                    const IconComponent = LucideIcons[cat.icono as keyof typeof LucideIcons] || HomeIcon;
+
+                    return {
+                        ...cat,
+                        icono: IconComponent, // Asigna el componente encontrado
+                        descripcionBreve: cat.descripcion_breve || "",
+                        problemasCount: (problemasData || []).filter(p => p.categoria_id === cat.id).length || 0
+                    };
+                });
+
+
+                setCategorias(mappedCategorias);
+
+                // Mapear problemas
+                const mappedProblemas: Problema[] = (problemasData || []).map(p => ({
+                    id: p.id,
+                    categoria: p.categoria_id,
+                    titulo: p.nombre,
+                    descripcion: p.descripcion,
+                    solucion: p.solucion || "",
+                    costo: p.costo || "",
+                    tiempo: p.tiempo || "",
+                    dificultad: p.dificultad || "Media",
+                    prevencion: p.prevencion || ""
+                }));
+
+                setProblemas(mappedProblemas);
+            } catch (error) {
+                console.error(error);
+            }
+        })();
+    }, []);
+
+    // Filtrar problemas por búsqueda y categoría
+    const problemasFiltrados = problemas.filter(problema => {
         const matchesSearch =
             problema.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
             problema.descripcion.toLowerCase().includes(searchTerm.toLowerCase());
@@ -35,7 +93,6 @@ export default function Home() {
 
     return (
         <div className="bg-background relative min-h-screen">
-            {/* ✨ Modal con fade moderno */}
             <AnimatePresence>
                 {isLoginModalOpen && (
                     <motion.div
@@ -44,13 +101,10 @@ export default function Home() {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ duration: 0.3, ease: "easeOut" }}
-                        className="fixed inset-0 z-50 flex items-center justify-center
-                       bg-[#022867]/20 backdrop-blur-md"
-                        onClick={() => setIsLoginModalOpen(false)} // 👈 clic en el overlay
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-[#022867]/20 backdrop-blur-md"
+                        onClick={() => setIsLoginModalOpen(false)}
                     >
-                        <motion.div
-                            onClick={(e) => e.stopPropagation()} // 👈 evita que el clic en el modal cierre
-                        >
+                        <motion.div onClick={e => e.stopPropagation()}>
                             <LoginModal
                                 isOpen={isLoginModalOpen}
                                 onClose={() => setIsLoginModalOpen(false)}
@@ -61,12 +115,15 @@ export default function Home() {
             </AnimatePresence>
 
             <HeroSection searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
             <Categories
                 categorias={categorias}
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
             />
+
             <ProblemList problemas={problemasFiltrados} />
+
             <EmergencyContact />
         </div>
     );
