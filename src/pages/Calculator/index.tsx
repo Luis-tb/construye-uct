@@ -10,7 +10,7 @@ const costos = {
     pintura: 50,     // por galón
 };
 
-const Calculator: React.FC = () => {
+const Index: React.FC = () => {
     const [tipoCalculo, setTipoCalculo] = useState('');
     const [largo, setLargo] = useState('');
     const [ancho, setAncho] = useState('');
@@ -218,4 +218,4 @@ const Calculator: React.FC = () => {
     );
 };
 
-export default Calculator;
+export default Index;

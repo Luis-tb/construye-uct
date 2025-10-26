@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type {FC} from 'react';
 
 export interface Problema {
     id: number;
@@ -15,8 +15,10 @@ export interface Problema {
 export interface Categoria {
     id: string;
     nombre: string;
-    icono: FC<{ className?: string;}>; // solo icono
-    descripcionBreve?: string;
+    icono: FC<{ className?: string; }>; // solo icono
+    color: string;
+    descripcion_breve?: string;
+    problems?: number;
 }
 
 export interface GuiaPrincipal {

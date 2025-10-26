@@ -1,5 +1,5 @@
-import type {MarkerData} from "@/types";
-import MapComponent from "@/components/map/MapComponent";
+import type {MarkerData} from "@/types.ts";
+import MapComponent from "@/pages/Profesionales/components/map/MapComponent.tsx";
 import {Users} from "lucide-react";
 
 // Datos de ejemplo para profesionales cercanos.
@@ -15,7 +15,7 @@ const profesionalesCercanos: MarkerData[] = [
  * Página para mostrar profesionales en un mapa.
  * Utiliza el componente reutilizable MapComponent.
  */
-export default function Profesionales() {
+export default function Index() {
     return (
         <div className="bg-gray-50 py-16 md:py-20">
             <main className="max-w-6xl mx-auto px-4">

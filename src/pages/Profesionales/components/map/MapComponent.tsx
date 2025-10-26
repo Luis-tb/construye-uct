@@ -2,8 +2,8 @@ import type {FC} from "react";
 import {useEffect, useMemo, useState} from "react";
 import {GoogleMap, InfoWindow, Marker, useJsApiLoader} from '@react-google-maps/api';
 import {Loader} from "lucide-react";
-import type {MarkerData} from "@/types"; // Importar MarkerData desde types.ts
-import MarkerInfoWindowContent from "@/components/map/MarkerInfoWindowContent"; // Nuevo componente para el contenido de InfoWindow
+import type {MarkerData} from "@/types.ts"; // Importar MarkerData desde types.ts
+import MarkerInfoWindowContent from "@/pages/Profesionales/components/map/MarkerInfoWindowContent.tsx"; // Nuevo componente para el contenido de InfoWindow
 
 /**
  * Coordenadas por defecto para Trujillo, Perú.

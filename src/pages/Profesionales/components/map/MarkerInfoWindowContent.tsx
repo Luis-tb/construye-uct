@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { Phone, User } from "lucide-react";
-import type { MarkerData } from "@/types"; // Importar MarkerData desde types.ts
+import type { MarkerData } from "@/types.ts"; // Importar MarkerData desde types.ts
 
 /**
  * Props para el componente MarkerInfoWindowContent.
