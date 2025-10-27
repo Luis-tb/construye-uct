@@ -3,6 +3,7 @@ import {LogIn} from "lucide-react";
 import {AnimatePresence, motion} from "framer-motion";
 import {useLoginModalStore} from "@/components/auth/store/useLoginModalStore.ts";
 
+/*SVG de Google*/
 const GoogleIcon = () => (
     <svg className="w-6 h-6" viewBox="0 0 533.5 544.3">
         <path fill="#4285F4"
@@ -16,10 +17,6 @@ const GoogleIcon = () => (
     </svg>
 )
 
-/**
- * Modal de Login autónomo.
- * Gestiona su propia visibilidad a través del store global `useLoginModalStore`.
- */
 const LoginModal = () => {
     const {isOpen, close} = useLoginModalStore();
     if (!isOpen) return null
@@ -57,13 +54,11 @@ const LoginModal = () => {
                         >
                             {/* Contenido del modal */}
                             <div
-                                // 💡 MEJORA: Diseño más limpio, gradiente sutil y padding ajustado.
                                 className="bg-gradient-to-br from-white to-gray-50 p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-sm mx-4"
                                 onClick={(e) => e.stopPropagation()} // 👈 evita que clic dentro cierre el modal
                             >
                                 {/* Header */}
                                 <div className="text-center">
-                                    {/* 💡 MEJORA: Icono decorativo y tipografía mejorada. */}
                                     <div
                                         className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 mb-4">
                                         <LogIn className="h-8 w-8 text-blue-600"/>
@@ -79,14 +74,11 @@ const LoginModal = () => {
                                 <div className="mt-8 flex flex-col items-center space-y-4">
                                     <button
                                         onClick={handleGoogleLogin}
-                                        // 💡 MEJORA: Botón primario más destacado.
                                         className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-lg bg-blue-600 text-white cursor-pointer font-semibold shadow-lg hover:bg-blue-700 transform hover:-translate-y-0.5 transition-all duration-300"
                                     >
                                         <GoogleIcon/>
                                         <span>Iniciar sesión con Google</span>
                                     </button>
-
-                                    {/* 💡 MEJORA: El botón de cerrar ahora es secundario y menos intrusivo. */}
                                     <button
                                         onClick={close}
                                         className="text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors"
@@ -102,6 +94,5 @@ const LoginModal = () => {
         </AnimatePresence>
     )
 }
-
 
 export default LoginModal
