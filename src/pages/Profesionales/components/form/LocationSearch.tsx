@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import {Autocomplete, useLoadScript} from '@react-google-maps/api';
-import {Label} from "@/components/ui/label.tsx";
 import {Input} from "@/components/ui/input.tsx";
 
 interface LocationSearchProps {
@@ -38,15 +37,12 @@ export const LocationSearch = ({onLocationSelect}: LocationSearchProps) => {
     if (!isLoaded) return <p className="text-xs text-gray-500">Cargando buscador...</p>;
 
     return (
-        <div className="space-y-4">
-            <Label htmlFor="address-search">O busca una dirección</Label>
-            <Autocomplete
-                onLoad={onLoad}
-                onPlaceChanged={onPlaceChanged}
-                options={{componentRestrictions: {country: 'pe'}}} // Opcional: Restringir a Perú
-            >
-                <Input type="text" placeholder="Escribe una calle, ciudad..." className="w-full"/>
-            </Autocomplete>
-        </div>
+        <Autocomplete
+            onLoad={onLoad}
+            onPlaceChanged={onPlaceChanged}
+            options={{componentRestrictions: {country: 'pe'}}} // Opcional: Restringir a Perú
+        >
+            <Input type="text" placeholder="Escribe una calle, ciudad..." className="w-full"/>
+        </Autocomplete>
     );
 };

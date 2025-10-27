@@ -1,7 +1,8 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {useSearchParams} from "react-router-dom";
-import {allProfessionals as professionalsData} from "@/pages/Profesionales/professionals.data.ts";
 import type {Professional} from "@/pages/Profesionales/professionals.data.ts";
+import {useQuery, type UseQueryResult} from "@tanstack/react-query";
+import {supabase} from "@/lib/supabaseClient.ts";
 
 type GeolocationStatus = 'idle' | 'loading' | 'success' | 'error';
 /**
@@ -10,24 +11,10 @@ type GeolocationStatus = 'idle' | 'loading' | 'success' | 'error';
 export type SortOption = 'distance' | 'rating' | 'jobs';
 
 /**
- * Calcula la distancia en kilómetros entre dos puntos geográficos.
- * @param lat1 - Latitud del punto 1.
- * @param lon1 - Longitud del punto 1.
- * @param lat2 - Latitud del punto 2.
- * @param lon2 - Longitud del punto 2.
- * @returns La distancia en kilómetros.
+ * 💡 MEJORA: Define el tipo de dato que retorna la RPC de Supabase.
+ * Esto nos permite tipar correctamente la respuesta y evitar 'any'.
  */
-const getDistanceInKm = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
-    const R = 6371; // Radio de la Tierra en km
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-};
+type ProfessionalFromRPC = Omit<Professional, 'distance'> & { distance: number };
 
 /**
  * @module useProfessionals
@@ -45,7 +32,7 @@ export const useProfessionals = () => {
 
     // --- State from URL ---
     const showProfessionals = useMemo(() => searchParams.get('search') === 'true', [searchParams]);
-    const maxDistance = useMemo(() => parseFloat(searchParams.get('dist') || '5'), [searchParams]);
+    const maxDistance = useMemo(() => parseFloat(searchParams.get('dist') || '10'), [searchParams]);
     const minRating = useMemo(() => parseFloat(searchParams.get('rating') || '0'), [searchParams]);
     const selectedSpecialty = useMemo(() => searchParams.get('spec') || 'all', [searchParams]);
     const sortBy = useMemo(() => (searchParams.get('sort') as SortOption) || 'distance', [searchParams]);
@@ -60,6 +47,7 @@ export const useProfessionals = () => {
 
     const setSelectedSpecialty = (value: string) => updateQueryParam('spec', value);
     const setSortBy = (value: SortOption) => updateQueryParam('sort', value);
+    const [locationInputMode, setLocationInputMode] = useState<'gps' | 'search'>('search');
 
     const applyFilters = useCallback(({distance, rating}: { distance: number, rating: number }) => {
         setSearchParams(prev => {
@@ -76,73 +64,124 @@ export const useProfessionals = () => {
         setUserLocation(location);
         setLocationStatus('success'); // Marcamos como exitoso ya que fue una acción del usuario.
         // Actualiza la URL para reflejar la nueva ubicación de búsqueda
+        // 💡 MEJORA: Al hacer clic en el mapa, ahora se mantiene o se inicia la búsqueda.
         setSearchParams(prev => {
             prev.set('lat', String(location.lat));
             prev.set('lng', String(location.lng));
-            // Al cambiar la ubicación manualmente, no iniciamos una nueva búsqueda automáticamente.
-            prev.delete('search');
+            // Si ya estábamos en modo búsqueda, lo mantenemos. Si no, lo activamos.
+            prev.set('search', 'true');
             return prev;
         }, {replace: true});
     }, [setSearchParams]);
 
-    // --- Effects ---
+    /**
+     * 💡 MEJORA: Callback específico para cuando se hace clic en el mapa.
+     * Actualiza la ubicación y cambia el modo del input a 'search'.
+     */
+    const handleMapClick = useCallback((location: { lat: number; lng: number }) => {
+        setUserLocationManually(location);
+        // Cambia el modo del input a 'search' para dar feedback visual al usuario.
+        setLocationInputMode('search');
+    }, [setUserLocationManually]);
 
     /**
-     * Efecto para obtener la geolocalización del usuario al montar el componente.
+     * 💡 MEJORA: Centralizamos la lógica que inicia la búsqueda.
+     * Esta función actualiza la URL con la ubicación actual y el flag 'search=true'.
      */
+    const startSearch = useCallback(() => {
+        if (userLocation) {
+            setSearchParams(prev => {
+                prev.set('lat', String(userLocation.lat));
+                prev.set('lng', String(userLocation.lng));
+                prev.set('search', 'true');
+                return prev;
+            }, {replace: true});
+        }
+    }, [userLocation, setSearchParams]);
+
+    /**
+     * Callback para obtener la geolocalización del usuario cuando la solicita.
+     */
+    const requestUserLocation = useCallback(() => {
+        // 💡 MEJORA: Siempre intenta obtener la ubicación fresca del navegador, ignorando la URL.
+        setLocationStatus('loading');
+        if (!navigator.geolocation) {
+            setLocationStatus('error');
+            setLocationError("La geolocalización no es soportada por tu navegador.");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const newLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
+                setUserLocation(newLocation);
+                setLocationStatus('success');
+                // 💡 MEJORA: Inicia la búsqueda automáticamente después de obtener la ubicación.
+                startSearch();
+            },
+            (error) => {
+                console.error("Error obteniendo la ubicación:", error);
+                setLocationStatus('error');
+                setLocationError("No se pudo obtener la ubicación. Por favor, activa los permisos.");
+                // Considera un fallback si es necesario, o simplemente muestra el error.
+                // setUserLocation({lat: -8.1116, lng: -79.0288}); // Fallback a Trujillo
+            }
+        );
+    }, [startSearch]);
+
+    // --- Effects ---
+    // Carga la ubicación desde la URL al montar el componente, si existe.
     useEffect(() => {
-        // Si ya hay una ubicación en la URL, la usamos.
         const lat = searchParams.get('lat');
         const lng = searchParams.get('lng');
-        if (lat && lng) {
-            setUserLocation({lat: parseFloat(lat), lng: parseFloat(lng)});
+        if (lat && lng && !userLocation) {
+            setUserLocation({ lat: parseFloat(lat), lng: parseFloat(lng) });
             setLocationStatus('success');
-        } else {
-            // Si no, intentamos obtenerla del navegador.
-            setLocationStatus('loading');
-            if (!navigator.geolocation) {
-                setLocationStatus('error');
-                setLocationError("La geolocalización no es soportada por tu navegador.");
-                return;
+        }
+    }, [searchParams, userLocation]);
+
+    // --- Data Fetching con React Query ---
+    const {
+        data: professionalsFromDB = [],
+        isLoading: isLoadingProfessionals
+    }: UseQueryResult<Professional[], Error> = useQuery({
+        // 💡 La queryKey es dinámica. Si cambia alguno de estos valores, se hará un nuevo fetch.
+        queryKey: ['professionals', userLocation, maxDistance],
+        queryFn: async () => {
+            if (!userLocation) return [];
+            // Llamamos a la función RPC de Supabase que creamos.
+            const {data, error} = await supabase.rpc('nearby_professionals', {
+                lat_in: userLocation.lat,
+                lng_in: userLocation.lng,
+                radius_km_in: maxDistance, // Usamos maxDistance para pre-filtrar en la DB.
+            });
+            if (error) {
+                console.error("Error fetching professionals:", error);
+                throw new Error(error.message);
             }
 
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const newLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
-                    setUserLocation(newLocation);
-                    setLocationStatus('success');
-                },
-                (error) => {
-                    console.error("Error obteniendo la ubicación:", error);
-                    setLocationStatus('error');
-                    setLocationError("No se pudo obtener la ubicación. Por favor, activa los permisos.");
-                    setUserLocation({lat: -8.1116, lng: -79.0288}); // Fallback a Trujillo
-                }
-            );
-        }
-    }, [searchParams]);
-
-    /**
-     * Profesionales con la distancia calculada desde la ubicación del usuario.
-     */
-    const professionalsWithDistance = useMemo(() => {
-        if (!userLocation) return [];
-        return professionalsData.map(pro => ({
-            ...pro,
-            distance: parseFloat(getDistanceInKm(userLocation.lat, userLocation.lng, pro.lat, pro.lng).toFixed(1)),
-        })).sort((a, b) => a.distance - b.distance);
-    }, [userLocation]);
+            // Aseguramos que la distancia tenga un solo decimal.
+            // 💡 CORRECCIÓN: Tipamos 'p' con el tipo que definimos para la data de la RPC.
+            return (data || []).map((p: ProfessionalFromRPC) => ({
+                ...p,
+                distance: parseFloat(p.distance.toFixed(1))
+            }));
+        },
+        // Solo ejecutar la query si tenemos una ubicación de usuario y se ha iniciado la búsqueda.
+        enabled: !!userLocation && showProfessionals,
+    });
 
     /**
      * Profesionales filtrados según los criterios seleccionados.
      */
     const filteredAndSortedProfessionals = useMemo(() => {
-        const filtered = professionalsWithDistance.filter(pro => {
-            const matchesDistance = pro.distance <= maxDistance;
+        // El filtro de distancia ya se hizo en la DB, ahora filtramos por rating y especialidad en el cliente.
+        const filtered = professionalsFromDB.filter(pro => {
             const matchesRating = pro.rating >= minRating;
-            const matchesSpecialty = selectedSpecialty === "all" ||
-                pro.specialty.toLowerCase().includes(selectedSpecialty.toLowerCase());
-            return matchesDistance && matchesRating && matchesSpecialty;
+            // 💡 CORRECCIÓN: Un profesional puede tener varias especialidades en un string ("Plomería, Electricidad").
+            // Usamos `includes` para verificar si la especialidad seleccionada está dentro de ese string.
+            const matchesSpecialty = selectedSpecialty === "all" || (pro.specialty && pro.specialty.includes(selectedSpecialty));
+            return matchesRating && matchesSpecialty;
         });
 
         // 💡 MEJORA: Aplicamos el ordenamiento después del filtrado.
@@ -157,23 +196,17 @@ export const useProfessionals = () => {
                     return a.distance - b.distance; // Ascendente (más cercano a más lejano)
             }
         });
-    }, [professionalsWithDistance, maxDistance, minRating, selectedSpecialty, sortBy]);
+    }, [professionalsFromDB, minRating, selectedSpecialty, sortBy]);
 
     // --- Callbacks ---
 
+    /**
+     * Maneja el evento de envío del formulario de búsqueda.
+     */
     const handleSearch = useCallback((e: React.FormEvent) => {
         e.preventDefault();
-        if (userLocation) {
-            // La búsqueda ahora consiste en poner la ubicación del usuario en la URL
-            setSearchParams(prev => {
-                // Conservamos los filtros existentes si los hay
-                prev.set('lat', String(userLocation.lat));
-                prev.set('lng', String(userLocation.lng));
-                prev.set('search', 'true'); // 💡 La clave: activamos la búsqueda explícitamente
-                return prev;
-            }, {replace: true});
-        }
-    }, [userLocation, setSearchParams]);
+        startSearch();
+    }, [startSearch]);
 
     const resetFilters = useCallback(() => {
         setSearchParams(prev =>
@@ -190,7 +223,12 @@ export const useProfessionals = () => {
         showProfessionals,
         selectedProfessional, setSelectedProfessional,
         userLocation, locationStatus, locationError,
-        filteredProfessionals: filteredAndSortedProfessionals,
+        filteredProfessionals: showProfessionals ? filteredAndSortedProfessionals : [],
+        // 💡 MEJORA: Exponemos el estado de carga para que los componentes puedan usarlo.
+        isLoading: isLoadingProfessionals || locationStatus === 'loading',
+        isLoadingLocation: locationStatus === 'loading',
+        locationInputMode, setLocationInputMode,
+        handleMapClick,
         setUserLocationManually,
         // Filters
         maxDistance, minRating,
@@ -199,6 +237,7 @@ export const useProfessionals = () => {
         sortBy, setSortBy,
         // Actions
         handleSearch,
+        requestUserLocation, // Esta función ahora también inicia la búsqueda
         resetFilters,
         applyFilters,
     };

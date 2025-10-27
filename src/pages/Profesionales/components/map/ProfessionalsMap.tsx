@@ -13,7 +13,7 @@ interface ProfessionalsMapProps {
     professionals: Professional[];
     selectedProfessional: Professional | null;
     onProfessionalSelect: (pro: Professional | null) => void;
-    onMapClick: (location: { lat: number; lng: number }) => void;
+    onMapClick: (location: { lat: number; lng: number }) => void; // 👈 La firma no cambia, solo la función que se le pasa
 }
 
 export const ProfessionalsMap = (props: ProfessionalsMapProps) => {
@@ -99,7 +99,7 @@ export const ProfessionalsMap = (props: ProfessionalsMapProps) => {
                 mapRef.current.remove();
                 mapRef.current = null;
             }
-        }; // eslint-disable-next-line react-hooks/exhaustive-deps
+        };
     }, [showMap, userLocation, professionals, selectedProfessional, onProfessionalSelect, onMapClick, mapId]);
 
     // Center map on selected professional
