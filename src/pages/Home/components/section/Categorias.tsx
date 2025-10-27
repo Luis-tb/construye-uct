@@ -23,7 +23,16 @@ export default function Categorias() {
         if (error) {
             return <div className="text-center text-red-600">Error al cargar las categorías: {error}</div>;
         }
-
+        // Objeto que mapea IDs de categorías a clases de Tailwind
+        const categoryColorMap: { [key: string]: string } = {
+            'electricidad': 'from-yellow-500 to-yellow-600',
+            'plomeria': 'from-blue-500 to-blue-600',
+            'techos': 'from-red-500 to-red-600',
+            'cimientos': 'from-orange-500 to-orange-600',
+            'marmol': 'from-slate-400 to-slate-500',
+            'paredes': 'from-purple-500 to-purple-600',
+            'pisos': 'from-stone-500 to-stone-600',
+        };
         return (
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {categorias.map((category, index) => {
@@ -44,7 +53,7 @@ export default function Categorias() {
                             >
                                 <CardContent className="p-6">
                                     <div
-                                        className={`w-16 h-16 bg-gradient-to-br  ${category.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+                                        className={`w-16 h-16 bg-gradient-to-br ${categoryColorMap[category.id]} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
                                     >
                                         <Icon className="w-8 h-8 text-white"/>
                                     </div>

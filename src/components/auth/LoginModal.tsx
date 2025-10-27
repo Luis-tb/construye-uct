@@ -63,8 +63,7 @@ const LoginModal = () => {
                                         className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 mb-4">
                                         <LogIn className="h-8 w-8 text-blue-600"/>
                                     </div>
-                                    <h2 className="text-2xl font-bold tracking-tight text-gray-900">Bienvenido de
-                                        Vuelta</h2>
+                                    <h2 className="text-2xl font-bold tracking-tight text-gray-900">Bienvenido</h2>
                                     <p className="mt-2 text-gray-500">
                                         Inicia sesión para acceder a todas las funcionalidades.
                                     </p>
