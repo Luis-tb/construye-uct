@@ -21,14 +21,6 @@ export interface Categoria {
     problems?: number;
 }
 
-export interface GuiaPrincipal {
-    id: number;
-    titulo: string;
-    descripcion: string;
-    url: string;
-    icono: FC<{ className?: string }>;
-}
-
 export interface MarkerData {
     id: string;
     lat: number;

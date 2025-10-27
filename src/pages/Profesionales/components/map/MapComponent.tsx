@@ -105,7 +105,7 @@ const MapComponent: FC<MapComponentProps> = ({
                     position={currentPosition}
                     title={currentPosition.label}
                     icon={{
-                        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                        url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
                     }}
                 />
 

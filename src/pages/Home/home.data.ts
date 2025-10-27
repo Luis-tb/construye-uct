@@ -1,15 +1,10 @@
 import {
     CheckCircle2,
     Clock,
-    Droplet,
-    Hammer,
-    LayoutGrid,
     Lightbulb,
     Search,
     Star,
-    Triangle,
     Users,
-    Zap
 } from "lucide-react";
 
 export const stats = [
@@ -17,49 +12,6 @@ export const stats = [
     {number: "5,000+", label: "Profesionales Certificados", icon: Users},
     {number: "4.9/5", label: "Calificación Promedio", icon: Star},
     {number: "24/7", label: "Soporte Disponible", icon: Clock},
-];
-
-export const categories = [
-    {
-        id: "foundations",
-        title: "Cimientos",
-        icon: LayoutGrid,
-        color: "from-orange-500 to-orange-600",
-        problems: 3,
-        description: "Grietas, hundimientos, asentamientos",
-    },
-    {
-        id: "walls",
-        title: "Paredes",
-        icon: Hammer,
-        color: "from-purple-500 to-purple-600",
-        problems: 4,
-        description: "Grietas, humedad, fisuras",
-    },
-    {
-        id: "roofs",
-        title: "Techos",
-        icon: Triangle,
-        color: "from-red-500 to-red-600",
-        problems: 3,
-        description: "Goteras, hundimientos, grietas",
-    },
-    {
-        id: "electrical",
-        title: "Electricidad",
-        icon: Zap,
-        color: "from-yellow-500 to-yellow-600",
-        problems: 4,
-        description: "Fallas, chispas, sobrecargas",
-    },
-    {
-        id: "plumbing",
-        title: "Plomería",
-        icon: Droplet,
-        color: "from-blue-500 to-blue-600",
-        problems: 3,
-        description: "Fugas, obstrucciones, baja presión",
-    },
 ];
 
 export const howItWorks = [
