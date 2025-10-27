@@ -38,9 +38,9 @@ export default function Layout() {
     }, [closeLoginModal, openLoginModal, user]);
 
     return (
-        <div className="bg-background">
+        <div className="bg-background flex flex-col min-h-screen">
             <Header/>
-            <main>
+            <main className="flex-grow">
                 <AppScrollManager/>
                 <Outlet/>
             </main>

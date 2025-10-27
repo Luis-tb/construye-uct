@@ -1,8 +1,8 @@
 import {useQuery} from "@tanstack/react-query";
 import {supabase} from "@/lib/supabaseClient.ts";
 import type {Categoria} from "@/types.ts";
-import * as LucideIcons from "lucide-react";
-import {BookOpen, Home as HomeIcon} from "lucide-react";
+import * as LucideIcons from 'lucide-react';
+import {BookOpen, Home as HomeIcon} from 'lucide-react';
 
 /**
  * Opciones para configurar el comportamiento del hook `useCategorias`.
@@ -39,16 +39,16 @@ const fetchCategorias = async (withProblemCount: boolean): Promise<Categoria[]> 
         throw new Error(catError.message);
     }
 
-    return (categoriasData || []).map((cat: any) => {
+    return (categoriasData || []).map((cat) => {
         const IconComponent = LucideIcons[cat.icono as keyof typeof LucideIcons] || HomeIcon;
 
         // Si pedimos el conteo, el resultado viene en un array. Lo extraemos.
-        const problemCount = withProblemCount ? (cat.problems?.[0]?.count ?? 0) : (cat.problems || 0);
+        const problemCount = withProblemCount ? (cat.problems[0]?.count ?? 0) : 0;
 
         return {
             ...cat,
             icono: IconComponent,
-            problems: problemCount,
+            problems: problemCount
         };
     });
 };
@@ -64,13 +64,13 @@ const fetchCategorias = async (withProblemCount: boolean): Promise<Categoria[]> 
  *  - `error`: Objeto de error si la petición falla.
  */
 export const useCategorias = (options: UseCategoriasOptions = {}) => {
-    const { withProblemCount = false, includeAll = false } = options;
+    const {withProblemCount = false, includeAll = false} = options;
 
     const {data: categorias, isLoading, error} = useQuery({
         // 💡 MEJORA: La queryKey ahora es dinámica.
         // Esto asegura que TanStack Query cachee los resultados por separado
         // para cada combinación de opciones.
-        queryKey: ['categorias', { withProblemCount, includeAll }],
+        queryKey: ['categorias', {withProblemCount, includeAll}],
         queryFn: async () => {
             const fetchedCategorias = await fetchCategorias(withProblemCount);
 

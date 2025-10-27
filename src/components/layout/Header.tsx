@@ -154,7 +154,7 @@ export default function Header() {
 
                     {/* Menú móvil */}
                     {isMenuOpen && (
-                        <div className="xl:hidden bg-white pb-4">
+                        <div className="xl:hidden bg-transparent pb-4">
                             <nav className="flex flex-col items-center space-y-4">
                                 <NavLink to="/" className="text-sm font-medium text-slate-600 hover:text-black"
                                          onClick={() => setIsMenuOpen(false)}>Inicio</NavLink>
