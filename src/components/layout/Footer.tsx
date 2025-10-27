@@ -4,7 +4,7 @@ import {ROUTES} from "@/config/routes.ts";
 export default function Footer() {
     const navigate = useNavigate();
     return (
-        <footer className="bg-white border-t border-gray-200 mt-12">
+        <footer className="bg-white border-t border-gray-200">
             <div className="container mx-auto px-4 py-8">
                 <div className="grid md:grid-cols-3 gap-8">
                     <div>

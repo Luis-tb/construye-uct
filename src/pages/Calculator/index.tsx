@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {AlertTriangle, Calculator as CalculatorIcon, CircleDollarSign, ClipboardList} from 'lucide-react';
+import {Label} from "@/components/ui/label.tsx";
 
 // --- Constantes de Materiales y Costos (Aproximados en PEN) ---
 const costos = {
@@ -89,7 +90,7 @@ const Index: React.FC = () => {
         setCostoTotal(costo > 0 ? parseFloat(costo.toFixed(2)) : null);
     };
 
-    const renderInputs = () => {
+    const Inputs = () => {
         switch (tipoCalculo) {
             case 'concreto':
                 return (
@@ -163,9 +164,9 @@ const Index: React.FC = () => {
 
                     {tipoCalculo && (
                         <div>
-                            <label className="block text-lg font-semibold text-gray-800 mb-3">2. Ingresa las
-                                medidas</label>
-                            {renderInputs()}
+                            <Label className="block text-lg font-semibold text-gray-800 mb-3">2. Ingresa las
+                                medidas</Label>
+                            <Inputs/>
                         </div>
                     )}
 
