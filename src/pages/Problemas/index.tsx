@@ -20,13 +20,15 @@ import {Button} from "@/components/ui/button.tsx";
 import {ImageWithFallback} from "@/components/ImageWithFallback.tsx";
 import {useNavigate} from "react-router-dom";
 import {ROUTES} from "@/config/routes.ts";
+import * as React from "react"; //
 
 interface Problem {
     id: string;
     title: string;
     cause: string;
     image: string;
-    icon: any;
+    // Tipo correcto para un componente que se va a renderizar
+    icon: React.ElementType;
     category: string;
     severity: "low" | "medium" | "high";
 }
@@ -34,11 +36,11 @@ interface Problem {
 interface Category {
     id: string;
     name: string;
-    icon: any;
+    // Tipo correcto para un componente que se va a renderizar
+    icon: React.ElementType;
     color: string;
     description: string;
 }
-
 export default function CommonProblemsPage() {
     const onNavigate = useNavigate()
     const [searchTerm, setSearchTerm] = useState("");
