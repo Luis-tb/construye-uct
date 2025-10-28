@@ -30,9 +30,6 @@ const LoginModal = () => {
             console.error('❌ Error al iniciar sesión con Google:', error.message)
             return
         }
-
-        console.log('✅ Redirigiendo a Google...')
-        // El listener de autenticación global en el Header se encargará de cerrar el modal.
     }
     return (
         <AnimatePresence>

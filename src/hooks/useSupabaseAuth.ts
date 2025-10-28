@@ -1,26 +1,27 @@
-import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabaseClient'
-import type { User } from '@supabase/supabase-js'
+import {supabase} from "@/lib/supabaseClient";
+import type {User} from "@supabase/supabase-js";
+import {useState, useEffect} from "react";
 
 export function useSupabaseAuth() {
-    const [user, setUser] = useState<User | null | undefined>(undefined)
+    const [user, setUser] = useState<User | null | undefined>(undefined);
 
     useEffect(() => {
-        const fetchUser = async () => {
-            const { data } = await supabase.auth.getUser()
-            setUser(data.user ?? null)
-        }
+        // 1️⃣ Obtener la sesión actual
+        const fetchSession = async () => {
+            const {data: {session}, error} = await supabase.auth.getSession();
+            if (error) console.error("Error getting session:", error.message);
+            setUser(session?.user ?? null);
+        };
+        void fetchSession();
 
-        fetchUser().catch(console.error)
+        // 2️⃣ Escuchar cambios de sesión (login/logout)
+        const {data: listener} = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
 
-        const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null)
-        })
+        // 3️⃣ Cleanup del listener
+        return () => listener.subscription.unsubscribe();
+    }, []);
 
-        return () => {
-            subscription?.subscription.unsubscribe()
-        }
-    }, [])
-
-    return { user }
+    return {user};
 }

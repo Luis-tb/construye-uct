@@ -1,52 +1,64 @@
-import {Outlet, useLocation} from "react-router-dom";
-import Header from "@/components/layout/Header.tsx";
-import Footer from "@/components/layout/Footer.tsx";
-import Chatbot from "@/components/chatbot/ChatBot.tsx";
-import {useEffect} from "react";
-import LoginModal from "@/components/auth/LoginModal.tsx";
-import {useSupabaseAuth} from "@/hooks/useSupabaseAuth.ts";
-import {useLoginModalStore} from "@/components/auth/store/useLoginModalStore"
-
-/**
- * Componente de ayuda para gestionar efectos globales de la aplicación,
- * como el scroll en el cambio de ruta.
- */
-function AppScrollManager() {
-    const location = useLocation();
-
-    useEffect(() => {
-        if (location.hash) {
-            const element = document.querySelector(location.hash);
-            if (element) {
-                element.scrollIntoView({behavior: 'smooth'});
-                return;
-            }
-        }
-        window.scrollTo(0, 0);
-    }, [location]);
-    return null;
-}
+import { Outlet, useLocation } from "react-router-dom";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import Chatbot from "@/components/chatbot/ChatBot";
+import LoginModal from "@/components/auth/LoginModal";
+import { useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useLoginModalStore } from "@/components/auth/store/useLoginModalStore";
 
 export default function Layout() {
-    const {user} = useSupabaseAuth();
-    const openLoginModal = useLoginModalStore((state) => state.open);
-    const closeLoginModal = useLoginModalStore((state) => state.close);
-    // Modal login
+    const location = useLocation();
+    const { user, loading } = useAuth();
+    const { open: openLoginModal } = useLoginModalStore();
+
+    // Abrir el modal de login al cargar la página si el usuario no está autenticado.
     useEffect(() => {
-        if (user === null) openLoginModal()
-        else closeLoginModal();
-    }, [closeLoginModal, openLoginModal, user]);
+        const timer = setTimeout(() => {
+            // Obtenemos el estado más reciente del store para evitar problemas con closures.
+            const { isOpen } = useLoginModalStore.getState();
+
+            // La condición para abrir el modal es:
+            // 1. La autenticación no está cargando.
+            // 2. No hay un usuario logueado.
+            // 3. El modal no está ya abierto.
+            // 4. No estamos en una redirección de OAuth.
+            if (!loading && !user && !isOpen && !location.hash.includes("access_token")) {
+                openLoginModal();
+            }
+        }, 1500);
+
+        return () => clearTimeout(timer);
+
+        // Eliminamos `isOpen` de las dependencias para evitar que el efecto se
+        // vuelva a ejecutar cuando el modal se cierra.
+    }, [user, loading, openLoginModal, location.hash]);
+
+
+    // Scroll a ancla seguro
+    const AppScrollManager = () => {
+        useEffect(() => {
+            if (location.hash && !location.hash.includes("access_token")) {
+                const el = document.querySelector(location.hash);
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+                else window.scrollTo(0, 0);
+            } else {
+                window.scrollTo(0, 0);
+            }
+        }, [location.hash]);
+        return null;
+    };
 
     return (
         <div className="bg-background flex flex-col min-h-screen">
-            <Header/>
+            <Header />
             <main className="flex-grow">
-                <AppScrollManager/>
-                <Outlet/>
+                <AppScrollManager />
+                <Outlet />
             </main>
-            <Footer/>
-            <Chatbot/>
-            <LoginModal/>
+            <Footer />
+            <Chatbot />
+            <LoginModal />
         </div>
     );
 }
