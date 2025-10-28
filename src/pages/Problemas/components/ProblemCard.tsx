@@ -4,17 +4,20 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useNavigate } from "react-router-dom";
 import { createPath } from "@/config/routes.ts";
-import type { Problem } from "@/pages/Problemas/problems.data.ts";
+import type { Problem } from "@/types.ts";
+import type { FC } from "react";
 
 interface ProblemCardProps {
     problem: Problem;
+    icon: FC<{ className?: string }>;
     severityColor: string;
     severityLabel: string;
 }
 
-export const ProblemCard = ({ problem, severityColor, severityLabel }: ProblemCardProps) => {
+export const ProblemCard = ({ problem, icon: Icon, severityColor, severityLabel }: ProblemCardProps) => {
     const navigate = useNavigate();
-    const Icon = problem.icon;
+    // ✅ DEBUG: Ver las props de severidad recibidas en ProblemCard
+    // console.log(`ProblemCard received: ${problem.title}, Color: ${severityColor}, Label: ${severityLabel}`);
 
     return (
         <Card className="overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group" onClick={() => navigate(createPath('PROBLEM_DETAIL', { id: problem.id }))}>
@@ -30,7 +33,13 @@ export const ProblemCard = ({ problem, severityColor, severityLabel }: ProblemCa
             <CardContent className="p-6">
                 <h3 className="mb-2 text-gray-900">{problem.title}</h3>
                 <p className="text-gray-600 mb-4 line-clamp-2">{problem.cause}</p>
-                <Button className="w-full group-hover:bg-blue-700 transition-colors">Ver solución</Button>
+                <Button
+                    className="w-full group-hover:bg-blue-700 transition-colors"
+                    onClick={(e) => {
+                        e.stopPropagation(); // Evita que el clic en el botón active el onClick de la Card padre
+                        navigate(createPath('PROBLEM_DETAIL', { id: problem.id }));
+                    }}
+                >Ver solución</Button>
             </CardContent>
         </Card>
     );

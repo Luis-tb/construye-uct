@@ -10,13 +10,13 @@ import {ProblemDetailSkeleton} from "@/pages/Problemas/components/detail/Problem
 
 export default function ProblemDetail() {
     const navigate = useNavigate();
-    const {problem, details, isLoading, found} = useProblemDetail();
+    const {problem, details, isLoading, isError} = useProblemDetail(); // Obtenemos las guías
 
     if (isLoading) {
         return <ProblemDetailSkeleton />;
     }
 
-    if (!found || !problem || !details) {
+    if (isError || !problem || !details) {
         return (
             <div className="text-center py-20">
                 <AlertTriangle className="mx-auto h-12 w-12 text-yellow-500"/>

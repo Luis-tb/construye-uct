@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { AlertCircle, CheckCircle } from "lucide-react";
-import type { ProblemDetailData } from "@/pages/Problemas/problems.data.ts";
+import type { ProblemDetailData } from "@/types.ts"; // Importar desde types.ts
 
 interface ProblemContentProps {
     problem: ProblemDetailData;

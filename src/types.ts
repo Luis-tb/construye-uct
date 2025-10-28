@@ -1,15 +1,13 @@
 import type {FC} from 'react';
 
-export interface Problema {
-    id: number;
-    categoria: string; // id de la categoría
-    titulo: string;
-    descripcion: string;
-    solucion: string;
-    costo: string;
-    tiempo: string;
-    dificultad: 'Baja' | 'Media' | 'Alta';
-    prevencion: string;
+export interface Problem {
+    id: string;
+    title: string;
+    cause: string;
+    image: string;
+    // icon: React.ElementType; // Se elimina, ahora se obtiene de la categoría
+    category: string;
+    severity: "low" | "medium" | "high";
 }
 
 export interface Categoria {
@@ -20,6 +18,20 @@ export interface Categoria {
     descripcion_breve?: string;
     problems?: number;
 }
+export interface ProblemDetailData {
+    commonCause: string;
+    whyItHappens: string;
+    solutions: string[];
+}
+
+export interface Guia { // Aseguramos que 'Guia' esté explícitamente exportada
+    id: string;
+    titulo: string;
+    contenido: string;
+    tipo: string; // e.g., 'articulo', 'video', 'pasos'
+    imagen_url?: string;
+}
+
 
 export interface MarkerData {
     id: string;
