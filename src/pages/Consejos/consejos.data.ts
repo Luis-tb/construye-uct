@@ -1,13 +1,3 @@
-import {
-    BookOpen,
-    Droplet,
-    Fence,
-    Hammer,
-    Paintbrush,
-    Sparkles,
-    Zap,
-} from "lucide-react";
-
 export interface Article {
     id: number;
     title: string;
@@ -30,19 +20,9 @@ export interface VideoTutorial {
     category: string;
 }
 
-export const categories = [
-    { id: "all", label: "Todos", icon: BookOpen },
-    { id: "estructura", label: "Estructura", icon: Hammer },
-    { id: "electricidad", label: "Electricidad", icon: Zap },
-    { id: "pintura", label: "Pintura", icon: Paintbrush },
-    { id: "plomeria", label: "Plomería", icon: Droplet },
-    { id: "techos", label: "Techos", icon: Fence },
-    { id: "acabados", label: "Acabados", icon: Sparkles },
-];
-
 export const articles: Article[] = [
     {
-        id: 1,
+        id: 1, // <-- ID 1 (Destacado)
         title: "Cómo detectar problemas estructurales a tiempo",
         category: "techos",
         image: "https://images.unsplash.com/photo-1628002580365-f3c0a322d577?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb25zdHJ1Y3Rpb24lMjB0b29scyUyMHR1dG9yaWFsfGVufDF8fHx8MTc2MTEwNDM5MHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
@@ -55,7 +35,7 @@ export const articles: Article[] = [
         featured: true,
     },
     {
-        id: 3,
+        id: 2, // <-- ID 2 (Destacado)
         title: "Instalación eléctrica segura: Lo que debes saber",
         category: "electricidad",
         image: "https://images.unsplash.com/photo-1751486289943-0428133c367c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2FsJTIwd2lyaW5nJTIwcmVwYWlyfGVufDF8fHx8MTc2MTEwNDM5MHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
@@ -68,7 +48,7 @@ export const articles: Article[] = [
         featured: true,
     },
     {
-        id: 5,
+        id: 3, // <-- ID 3 (Destacado)
         title: "Guía completa para pintar paredes como profesional",
         category: "pintura",
         image: "https://images.unsplash.com/photo-1599619585752-c3edb42a414c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwYWludGluZyUyMGhvbWUlMjByZW5vdmF0aW9ufGVufDF8fHx8MTc2MTEwNDM5MHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
@@ -81,7 +61,7 @@ export const articles: Article[] = [
         featured: true,
     },
     {
-        id: 8,
+        id: 4, // <-- ID 4 (Normal)
         title: "Reparación de fugas de grifos: Soluciones rápidas",
         category: "plomeria",
         image: "https://images.unsplash.com/photo-1714399647789-2ab9b62d5395?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYXRocm9vbSUyMHBsdW1iaW5nJTIwZml4dHVyZXN8ZW58MXx8fHwxNzYxMjc2MzUzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
@@ -91,10 +71,10 @@ export const articles: Article[] = [
         views: "11.2k",
         rating: 4.8,
         tags: ["Reparación", "Urgente", "DIY"],
-        featured: true,
+        featured: false,
     },
     {
-        id: 13,
+        id: 5, // <-- ID 5 (Normal)
         title: "Mantenimiento e impermeabilización de techos",
         category: "techos",
         image: "https://images.unsplash.com/photo-1564883252299-593402391b1d?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -104,9 +84,10 @@ export const articles: Article[] = [
         views: "8.9k",
         rating: 4.7,
         tags: ["Mantenimiento", "Impermeabilizar", "Goteras"],
+        featured: false,
     },
     {
-        id: 15,
+        id: 6, // <-- ID 6 (Normal)
         title: "Cómo instalar pisos de vinilo como un experto",
         category: "acabados",
         image: "https://images.unsplash.com/photo-1616047006789-b7af5afb8c20?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -116,6 +97,7 @@ export const articles: Article[] = [
         views: "9.1k",
         rating: 4.8,
         tags: ["DIY", "Pisos", "Renovación"],
+        featured: false,
     },
 ];
 

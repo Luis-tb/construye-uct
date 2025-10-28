@@ -1,25 +1,22 @@
 import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Badge} from "@/components/ui/badge.tsx";
-import type {Article, categories as CategoryData} from "@/pages/Consejos/consejos.data.ts";
-import {useCategorias} from "@/hooks/useCategorias.ts";
+import type { Article } from "@/pages/Consejos/consejos.data.ts";
+import type { Categoria } from "@/types";
 
 interface CategoryTabsProps {
-    categories: typeof CategoryData;
+    categorias: Categoria[];
     allArticles: Article[];
     selectedCategory: string;
     onCategoryChange: (category: string) => void;
 }
 
 export const CategoryTabs = (props: CategoryTabsProps) => {
-    const {
-        allArticles, selectedCategory, onCategoryChange,
-    } = props;
-
-    const {categorias} = useCategorias({withProblemCount: true, includeAll: true})
+    const { categorias, allArticles, selectedCategory, onCategoryChange } = props;
 
     return (
         <Tabs value={selectedCategory} onValueChange={onCategoryChange} className="mb-8">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 mb-8">
+            {/* Ajuste para 7 categorías (incluyendo "Todos") */}
+            <TabsList className="grid w-full grid-cols-3 sm:grid-cols-4 md:grid-cols-7 mb-8">
                 {categorias.map((category) => {
                     const {icono: Icon, id, nombre: label} = category;
                     const count = allArticles.filter(

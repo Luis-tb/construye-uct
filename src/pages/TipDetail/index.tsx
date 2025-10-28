@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
-import { useParams, useNavigate, Navigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabaseClient.ts";
 import {
     ArrowLeft,
     Clock,
@@ -10,11 +11,13 @@ import {
     User,
     Calendar,
     Lightbulb,
+    Loader2,
+    AlertTriangle,
 } from "lucide-react";
 
 // Importaciones de datos y tipos
-// 💡 CORRECCIÓN: Se importa la función y el tipo correctos desde el archivo de datos detallados.
-import { getTipDetail, type TipDetail } from './tip-data';
+// 💡 CORRECCIÓN: Ya no usamos el archivo local, ahora solo necesitamos el tipo.
+import type { TipDetail } from './tip-data';
 
 // Importaciones de subcomponentes y UI
 import { Button } from "@/components/ui/button.tsx";
@@ -23,6 +26,14 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { ImageWithFallback } from "@/components/ImageWithFallback.tsx";
 import { TipSection } from './components/TipSection';
 import { ROUTES, createPath } from "@/config/routes.ts";
+
+// Interfaz para el resultado combinado de la consulta
+type FullArticle = TipDetail & {
+    // Estos campos vienen de la tabla 'articulos'
+    rating: number;
+    category: { nombre: string }; // 💡 MEJORA: Esperamos el objeto completo de la categoría
+    views: string;
+};
 
 // --- COMPONENTE CONTENEDOR (NUEVO) ---
 // Este componente se encarga de la lógica de routing.
@@ -67,13 +78,46 @@ const getDifficultyColor = (difficulty: TipDetail["difficulty"]): string => {
 };
 
 function TipDetailPagePresentation({ tipId, onNavigate }: TipDetailPageProps) {
-    // 💡 MEJORA: Se utiliza la función getTipDetail para obtener los datos. Es más directo y limpio que buscar en un array.
-    const tip = useMemo(() => getTipDetail(tipId), [tipId]);
-    
-    if (!tip) {
+    // 💡 MEJORA: Usamos useQuery para obtener el artículo y sus detalles desde Supabase.
+    const { data: tip, isLoading, error } = useQuery<FullArticle>({
+        queryKey: ['tipDetail', tipId],
+        queryFn: async () => {
+            const { data, error } = await supabase
+                .from('articulos')
+                .select(`
+                    *,
+                    category:categorias ( nombre ),
+                    articulo_detalles (
+                        *
+                    )
+                `)
+                .eq('id', tipId)
+                .single();
+
+            if (error) throw new Error(`Artículo con ID ${tipId} no encontrado.`);
+
+            // Combinamos los datos en un solo objeto plano para facilitar su uso
+            const { articulo_detalles, category_id, ...articleData } = data;
+            return { ...articleData, ...articulo_detalles, category_id }; // Mantenemos category_id por si se usa en otro lado
+        },
+        enabled: !!tipId,
+    });
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
+            </div>
+        );
+    }
+
+    if (error || !tip) {
         return (
             <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center text-center p-4">
-                <h2 className="text-2xl font-bold text-gray-800 mb-2">Artículo no encontrado</h2>
+                <AlertTriangle className="w-16 h-16 text-red-400 mx-auto mb-4" />
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                    {error ? "Error al cargar" : "Artículo no encontrado"}
+                </h2>
                 <p className="text-gray-600 mb-6">El consejo que buscas no existe o ha sido movido.</p>
                 <Button onClick={() => onNavigate('TIPS')}>
                     <ArrowLeft className="w-4 h-4 mr-2" />
@@ -107,7 +151,7 @@ function TipDetailPagePresentation({ tipId, onNavigate }: TipDetailPageProps) {
                             <div className="p-8 text-white w-full">
                                 <div className="flex items-center gap-2 mb-3">
                                     <Badge className="bg-blue-600 text-white">
-                                        {tip.category}
+                                        {tip.category?.nombre || 'Categoría'}
                                     </Badge>
                                     <Badge className={getDifficultyColor(tip.difficulty)}>
                                         {tip.difficulty}
@@ -143,7 +187,7 @@ function TipDetailPagePresentation({ tipId, onNavigate }: TipDetailPageProps) {
                                         <User className="w-6 h-6 text-blue-600" />
                                     </div>
                                     <div>
-                                        <p className="font-semibold text-gray-900">{tip.author}</p>
+                                        <p className="font-semibold text-gray-900">{tip.author || 'Equipo Construye'}</p>
                                         <div className="flex items-center gap-2 text-gray-500 text-sm">
                                             <Calendar className="w-3 h-3" />
                                             <span>{tip.date}</span>
@@ -228,20 +272,24 @@ function TipDetailPagePresentation({ tipId, onNavigate }: TipDetailPageProps) {
 
                     {/* Warnings */}
                     {tip.warnings?.length > 0 && (
-                        <TipSection
-                            title="Advertencias importantes"
-                            items={tip.warnings}
-                            type="warnings"
-                        />
+                        <div className="mb-6">
+                            <TipSection
+                                title="Advertencias importantes"
+                                items={tip.warnings}
+                                type="warnings"
+                            />
+                        </div>
                     )}
 
                     {/* Pro Tips */}
                     {tip.proTips?.length > 0 && (
-                        <TipSection
-                            title="Consejos profesionales"
-                            items={tip.proTips}
-                            type="proTips"
-                        />
+                        <div className="mb-6">
+                            <TipSection
+                                title="Consejos profesionales"
+                                items={tip.proTips}
+                                type="proTips"
+                            />
+                        </div>
                     )}
 
                     {/* Related Problems */}

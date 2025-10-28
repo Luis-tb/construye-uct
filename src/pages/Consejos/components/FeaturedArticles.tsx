@@ -67,7 +67,8 @@ export const FeaturedArticles = ({ articles, getDifficultyColor }: FeaturedArtic
                                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                                     <span className="text-gray-700 font-semibold">{article.rating}</span>
                                 </div>
-                                <Button size="sm" className="group-hover:bg-blue-700 transition-colors">
+                                {/* 💡 MEJORA: Se añade cursor-pointer para mejorar la indicación de interactividad. */}
+                                <Button size="sm" className="group-hover:bg-blue-700 transition-colors cursor-pointer">
                                     Leer más
                                     <ChevronRight className="w-4 h-4 ml-1" />
                                 </Button>

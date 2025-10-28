@@ -72,7 +72,8 @@ export const ArticleCard = ({ article, isSaved, onToggleSave, getDifficultyColor
                         </Badge>
                     ))}
                 </div>
-                <Button variant="outline" className="w-full group-hover:bg-blue-50 transition-colors text-sm">
+                {/* 💡 MEJORA: Se cambia el variant a primario (azul) y se añade cursor-pointer para consistencia visual. */}
+                <Button className="w-full transition-colors text-sm cursor-pointer">
                     Leer artículo
                 </Button>
             </CardContent>
