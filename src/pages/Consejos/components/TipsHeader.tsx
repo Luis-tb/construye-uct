@@ -1,5 +1,6 @@
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input.tsx";
+import {Badge} from "@/components/ui/badge.tsx";
 
 interface TipsHeaderProps {
     searchTerm: string;
@@ -8,7 +9,7 @@ interface TipsHeaderProps {
 
 export const TipsHeader = ({ searchTerm, onSearchChange }: TipsHeaderProps) => (
     <div className="max-w-4xl mx-auto mb-12 text-center">
-        <h1 className="mb-3 text-gray-900">Consejos y Tutoriales</h1>
+        <Badge className="mb-4">Consejos y Tutoriales</Badge>
         <p className="text-gray-600 mb-8">
             Aprende a mantener y mejorar tu hogar con guías profesionales paso a paso
         </p>

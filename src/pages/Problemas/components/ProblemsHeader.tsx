@@ -1,5 +1,6 @@
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input.tsx";
+import {Badge} from "@/components/ui/badge.tsx";
 
 interface ProblemsHeaderProps {
     searchTerm: string;
@@ -9,7 +10,7 @@ interface ProblemsHeaderProps {
 export const ProblemsHeader = ({ searchTerm, onSearchChange }: ProblemsHeaderProps) => {
     return (
         <div className="max-w-4xl mx-auto mb-12 text-center">
-            <h1 className="mb-3 text-gray-900">Problemas Comunes</h1>
+            <Badge className="mb-4">Problemas Comunes</Badge>
             <p className="text-gray-600 mb-8">
                 Identifica y soluciona los problemas más frecuentes en tu hogar
             </p>

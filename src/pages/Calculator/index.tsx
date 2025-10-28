@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {AlertTriangle, Calculator as CalculatorIcon, CircleDollarSign, ClipboardList} from 'lucide-react';
 import {Label} from "@/components/ui/label.tsx";
+import {Badge} from "@/components/ui/badge.tsx";
 
 // --- Constantes de Materiales y Costos (Aproximados en PEN) ---
 const costos = {
@@ -140,7 +141,7 @@ const Index: React.FC = () => {
         <div className="bg-gray-50 py-16 md:py-20">
             <main className="max-w-4xl mx-auto px-4">
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Calculadora de Materiales</h1>
+                    <Badge className="mb-4 text-1.5xl" >Calculadora de Materiales</Badge>
                     <p className="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Estima la cantidad de
                         materiales y el costo aproximado para tu proyecto.</p>
                 </div>

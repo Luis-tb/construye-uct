@@ -77,7 +77,7 @@ export default function HeroSection() {
                     >
                         <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                             <ImageWithFallback
-                                src="https://hrijoqgvzeisrylyambe.supabase.co/storage/v1/object/sign/Imagenes/HERO-SECTION-IMG.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iNTIxN2ZkNC1hNzMyLTRhZDItYjIyYS02YzQ2ZTQ2NjliNTUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJJbWFnZW5lcy9IRVJPLVNFQ1RJT04tSU1HLmpwZyIsImlhdCI6MTc2MTQ0NjU4NSwiZXhwIjoxNzkyOTgyNTg1fQ.d3dWlxSzwDK8y9q9JW7E9tEL0qNZXok0pL1EzD6_c68"
+                                src="https://images.unsplash.com/photo-1742112125567-3e8967bad60f?ixlib=rb-4.1.0&w=1080&fm=webp&q=85"
                                 alt="Casa moderna"
                                 className="w-full h-auto"
                             />
