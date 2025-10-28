@@ -11,6 +11,7 @@ import HomePage from "@/pages/Home";
 import Guides from "@/pages/Problemas";
 import ProblemDetail from "@/components/guide/ProblemDetail.tsx";
 import Calculator from "@/pages/Calculator";
+import TipDetail from "@/pages/TipDetail";
 import Consejos from "@/pages/Consejos";
 import Profesionales from "@/pages/Profesionales";
 import ProfessionalDetail from "@/pages/Profesionales/ProfessionalDetail.tsx"; // 👈 Importar nuevo componente
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
         children: [
             {index: true, element: <HomePage/>},
             {path: ROUTES.TIPS.substring(1), element: <Consejos/>},
-            {path: ROUTES.TIP_DETAIL.substring(1), element: <Consejos/>},
+            {path: ROUTES.TIP_DETAIL.substring(1), element: <TipDetail/>}, // 👈 2. Usar el componente correcto para la ruta
             {path: ROUTES.PROBLEMS_SOLUTIONS.substring(1), element: <Guides/>},
             {path: ROUTES.PROBLEM_DETAIL.substring(1), element: <ProblemDetail/>},
             {path: ROUTES.CALCULATOR.substring(1), element: <Calculator/>},

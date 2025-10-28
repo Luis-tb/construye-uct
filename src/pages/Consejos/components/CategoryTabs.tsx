@@ -1,25 +1,18 @@
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Badge} from "@/components/ui/badge.tsx";
-import {ArticleGrid} from "./ArticleGrid.tsx";
 import type {Article, categories as CategoryData} from "@/pages/Consejos/consejos.data.ts";
 import {useCategorias} from "@/hooks/useCategorias.ts";
 
 interface CategoryTabsProps {
     categories: typeof CategoryData;
     allArticles: Article[];
-    filteredArticles: Article[];
     selectedCategory: string;
     onCategoryChange: (category: string) => void;
-    savedArticles: number[];
-    onToggleSave: (id: number) => void;
-    getDifficultyColor: (difficulty: string) => string;
-    onClearFilters: () => void;
 }
 
 export const CategoryTabs = (props: CategoryTabsProps) => {
     const {
-        allArticles, filteredArticles, selectedCategory, onCategoryChange,
-        savedArticles, onToggleSave, getDifficultyColor, onClearFilters
+        allArticles, selectedCategory, onCategoryChange,
     } = props;
 
     const {categorias} = useCategorias({withProblemCount: true, includeAll: true})
@@ -42,14 +35,7 @@ export const CategoryTabs = (props: CategoryTabsProps) => {
                 })}
             </TabsList>
 
-            <TabsContent value={selectedCategory}>
-                <ArticleGrid articles={filteredArticles} {...{
-                    savedArticles,
-                    onToggleSave: onToggleSave,
-                    getDifficultyColor,
-                    onClearFilters
-                }} />
-            </TabsContent>
+            {/* El contenido (ArticleGrid) se renderizará ahora en el componente padre (TipsPage) */}
         </Tabs>
     );
 };

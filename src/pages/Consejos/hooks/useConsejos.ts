@@ -22,8 +22,16 @@ export const useConsejos = () => {
      * @type {Article[]}
      */
     const filteredArticles = useMemo(() => {
-        return articles.filter((article) => {
-            const matchesCategory = selectedCategory === "all" || article.category === selectedCategory;
+        // 💡 MEJORA: Se ajusta la lógica para que en "Todos" no se repitan los destacados.
+        let articlesToFilter = articles;
+
+        // Si la categoría es "todos" y no hay búsqueda, mostramos solo los no-destacados en la grilla principal.
+        if (selectedCategory === "all" && !searchTerm) {
+            articlesToFilter = articles.filter(article => !article.featured);
+        }
+
+        return articlesToFilter.filter((article) => {
+            const matchesCategory = selectedCategory === "all" || article.category === selectedCategory; // El filtro de categoría se mantiene
             const matchesSearch =
                 article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 article.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
