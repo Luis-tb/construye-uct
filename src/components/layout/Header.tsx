@@ -19,6 +19,18 @@ export default function Header() {
         { to: ROUTES.CALCULATOR, label: "Calculadora" },
     ];
 
+    /**
+     * Determina las clases CSS para un NavLink basándose en si está activo.
+     * @param {boolean} isActive - Si el enlace está activo.
+     * @returns {string} Las clases CSS correspondientes.
+     */
+    const getNavLinkClass = ({ isActive }: { isActive: boolean }): string => {
+        const baseClasses = "relative text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-300";
+        const activeClasses = "text-blue-600 bg-blue-50";
+        const inactiveClasses = "text-slate-600 hover:bg-gray-100 hover:text-black";
+        return `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`;
+    };
+
     return (
         <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-sm">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,13 +46,15 @@ export default function Header() {
                                 <NavLink
                                     key={item.to}
                                     to={item.to}
-                                    className={({ isActive }) =>
-                                        `relative text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-300 ${
-                                            isActive ? "text-blue-600 bg-blue-50" : "text-slate-600 hover:bg-gray-100 hover:text-black"
-                                        }`
-                                    }
+                                    className={getNavLinkClass}
                                 >
-                                    {item.label}
+                                    {({ isActive }) => (
+                                        <>
+                                            {item.label}
+                                            {/* Indicador de círculo para la pestaña activa */}
+                                            <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-blue-600 transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-0'}`} />
+                                        </>
+                                    )}
                                 </NavLink>
                             ))}
                         </nav>
