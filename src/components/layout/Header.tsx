@@ -40,7 +40,7 @@ export default function Header() {
                     </NavLink>
 
                     {/* Desktop Menu */}
-                    <div className="hidden xl:flex items-center space-x-6">
+                    <div className="hidden lg:flex items-center space-x-6">
                         <nav className="flex items-center space-x-1">
                             {menuItems.map(item => (
                                 <NavLink
@@ -83,7 +83,7 @@ export default function Header() {
                     </div>
 
                     {/* Mobile menu button */}
-                    <div className="xl:hidden">
+                    <div className="lg:hidden">
                         <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-black">
                             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}</button>
                     </div>
@@ -92,7 +92,7 @@ export default function Header() {
 
             {/* Mobile Menu */}
             {isMenuOpen && (
-                <div className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm sm:hidden" onClick={() => setIsMenuOpen(false)}>
+                <div className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm lg:hidden" onClick={() => setIsMenuOpen(false)}>
                     <div className="absolute top-16 right-3 bg-white/95 border border-gray-200 shadow-xl rounded-xl p-3 w-44 flex flex-col space-y-2">
                         {menuItems.map(item => (
                             <NavLink

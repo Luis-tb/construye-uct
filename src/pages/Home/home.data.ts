@@ -19,7 +19,7 @@ export const howItWorks = [
         step: "1",
         title: "Identifica tu problema",
         description:
-            "Explora nuestra base de datos con más de 17 problemas comunes del hogar organizados por categorías.",
+            "Explora nuestra base de datos con más de 10 problemas comunes del hogar organizados por categorías.",
         icon: Search,
     },
     {
