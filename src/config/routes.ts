@@ -7,7 +7,7 @@ export const ROUTES = {
     HOME: '/',
     PROBLEMS_SOLUTIONS: '/problemas',
     // Ejemplo de ruta dinámica con un parámetro 'id'
-    PROBLEM_DETAIL: '/problemas-soluciones/:id',
+    PROBLEM_DETAIL: '/problemas/:id',
     PROFESSIONALS: '/profesionales',
     PROFESSIONALS_PROFILE: '/profesionales/:id',
     TIPS: '/consejos',
