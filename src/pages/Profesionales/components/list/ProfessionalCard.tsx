@@ -6,7 +6,7 @@ import {Badge} from "@/components/ui/badge.tsx";
 import {Award, CheckCircle2, Mail, MapPin, MessageSquare, Phone, Star} from "lucide-react";
 import {Button} from "@/components/ui/button.tsx";
 import {useNavigate} from "react-router-dom";
-import {ROUTES} from "@/config/routes.ts";
+import {createPath} from "@/config/routes.ts";
 
 interface ProfessionalCardProps {
     professional: Professional;
@@ -52,7 +52,7 @@ export const ProfessionalCard = ({professional, isSelected, onLocateClick}: Prof
                 "hover:shadow-lg transition-all cursor-pointer",
                 isSelected && "ring-2 ring-blue-600 shadow-lg"
             )}
-            onClick={() => navigate(`${ROUTES.PROFESSIONALS}/${professional.id}`)}
+            onClick={() => navigate(createPath('PROFESSIONALS_PROFILE', {id: professional.id}))}
         >
             <CardContent className="p-4">
                 <div className="flex gap-4">
